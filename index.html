@@ -62,7 +62,12 @@
     .badge { padding: 6px 10px; border: 1px solid rgba(255,255,255,.08); border-radius: 999px; color: var(--muted); font-size: 13px; }
 
     /* Grid */
-    .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px; margin-top: 28px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 18px;
+      margin-top: 28px;
+    }
 
     .card {
       grid-column: span 12;
@@ -128,13 +133,13 @@
     <section class="hero" id="top">
       <div>
         <h1><br><span style="color: var(--brand)">Welcome to my professional portfolio.</span></h1>
-        <div class="badges" aria-label="technológiák">
+        <!-- <div class="badges" aria-label="technológiák"> -->
           <!-- <span class="badge">Python</span> -->
           <!-- <span class="badge">SQL</span> -->
           <!-- <span class="badge">Pandas</span> -->
           <!-- <span class="badge">Power BI</span> -->
           <!-- <span class="badge">React</span> -->
-        </div>
+        <!-- </div> -->
       </div>
 
     </section>
