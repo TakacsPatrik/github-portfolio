@@ -1,39 +1,233 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-  <meta charset="UTF-8">
-  <title>Portfólióm</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Az Én Portfólióm</title>
+  <meta name="description" content="Portfólió – projektek, elérhetőségek és bemutatkozás" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: Arial, sans-serif; background: #f4f4f4; text-align: center; }
-    .container { display: flex; flex-wrap: wrap; justify-content: center; margin-top: 50px; }
-    .card {
-      background: white; 
-      border-radius: 10px; 
-      padding: 20px; 
-      margin: 15px; 
-      width: 250px; 
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-      transition: transform 0.2s;
+    :root {
+      --bg: #0b0f19;        /* sötét háttér */
+      --panel: #121829;     /* kártya háttér */
+      --muted: #9aa4b2;     /* másodlagos szöveg */
+      --text: #e6edf3;      /* elsődleges szöveg */
+      --brand: #7c91ff;     /* kiemelő szín */
+      --brand-2: #00e1d6;   /* másodlagos kiemelő */
+      --ring: rgba(124,145,255,0.4);
+      --radius: 16px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
     }
-    .card:hover { transform: scale(1.05); }
-    a { text-decoration: none; color: #333; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 800px at 10% -10%, rgba(124,145,255,.25), rgba(0,0,0,0) 60%),
+                  radial-gradient(1000px 700px at 90% 10%, rgba(0,225,214,.15), rgba(0,0,0,0) 50%),
+                  var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 1200px; padding: 24px; margin: 0 auto; }
+
+    /* Header */
+    header { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(10px); }
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      border: 1px solid rgba(255,255,255,.06);
+      background: rgba(18,24,41,.65);
+      padding: 12px 16px; border-radius: calc(var(--radius) - 4px);
+      box-shadow: var(--shadow);
+      margin-top: 16px;
+    }
+    .brand { display: flex; gap: 12px; align-items: center; font-weight: 700; }
+    .brand .dot { width: 10px; height: 10px; border-radius: 50%; background: linear-gradient(45deg, var(--brand), var(--brand-2)); box-shadow: 0 0 0 6px rgba(124,145,255,.15); }
+    .links { display: flex; gap: 10px; align-items: center; }
+    .chip {
+      display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px;
+      border: 1px solid rgba(255,255,255,.08); color: var(--muted);
+      background: #0f1424; border-radius: 999px; font-weight: 600; font-size: 14px;
+      transition: transform .15s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .chip:hover { transform: translateY(-1px); border-color: var(--ring); box-shadow: 0 6px 18px rgba(124,145,255,.18); color: #fff; }
+
+    /* Hero */
+    .hero { display: grid; grid-template-columns: 1fr; gap: 22px; padding: 48px 0 12px; }
+    .hero h1 { font-size: clamp(28px, 5vw, 44px); line-height: 1.15; margin: 0; }
+    .hero p { color: var(--muted); margin: 0; max-width: 70ch; }
+    .badges { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+    .badge { padding: 6px 10px; border: 1px solid rgba(255,255,255,.08); border-radius: 999px; color: var(--muted); font-size: 13px; }
+
+    /* Grid */
+    .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px; margin-top: 28px; }
+
+    .card {
+      grid-column: span 12;
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.0)), var(--panel);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .2s ease;
+      position: relative;
+    }
+    .card:hover { transform: translateY(-4px); border-color: var(--ring); box-shadow: 0 20px 45px rgba(0,0,0,.45); }
+
+    .thumb { aspect-ratio: 16/9; width: 100%; object-fit: cover; display: block; background: #0c1224; }
+
+    .card-body { padding: 18px; display: grid; gap: 6px; }
+    .card h3 { margin: 0; font-size: 18px; }
+    .card p { margin: 0; color: var(--muted); font-size: 14px; }
+
+    .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .tag { font-size: 12px; padding: 4px 8px; background: #0c1224; color: #c2c8d3; border: 1px solid rgba(255,255,255,.08); border-radius: 999px; }
+
+    .card-link { position: absolute; inset: 0; }
+
+    /* Responsive spans */
+    @media (min-width: 680px) {
+      .hero { grid-template-columns: 1.2fr .8fr; align-items: center; }
+      .card.sm { grid-column: span 6; }
+      .card.md { grid-column: span 8; }
+      .card.lg { grid-column: span 12; }
+    }
+    @media (min-width: 1024px) {
+      .card.sm { grid-column: span 4; }
+      .card.md { grid-column: span 6; }
+      .card.lg { grid-column: span 8; }
+    }
+
+    /* Footer */
+    footer { color: var(--muted); text-align: center; padding: 28px 0 60px; }
+
+    /* Utility */
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
   </style>
 </head>
 <body>
-  <h1>Portfólió Projektek</h1>
   <div class="container">
-    <div class="card">
-      <h2><a href="https://felhasznalonev.github.io/projekt1/">Projekt 1</a></h2>
-      <p>Leírás az első projektről.</p>
-    </div>
-    <div class="card">
-      <h2><a href="https://felhasznalonev.github.io/projekt2/">Projekt 2</a></h2>
-      <p>Leírás a második projektről.</p>
-    </div>
-    <div class="card">
-      <h2><a href="https://felhasznalonev.github.io/projekt3/">Projekt 3</a></h2>
-      <p>Leírás a harmadik projektről.</p>
-    </div>
+    <!-- NAVIGATION -->
+    <header>
+      <nav class="nav" aria-label="Fő navigáció">
+        <div class="brand">
+          <span class="dot" aria-hidden="true"></span>
+          <a href="#top" aria-label="Főoldal">Királyom – Portfólió</a>
+        </div>
+        <div class="links">
+          <!-- Cseréld a # linkeket a sajátodra -->
+          <a class="chip" href="https://github.com/felhasznalonev" target="_blank" rel="noreferrer noopener">GitHub</a>
+          <a class="chip" href="https://www.linkedin.com/in/felhasznalonev" target="_blank" rel="noreferrer noopener">LinkedIn</a>
+          <a class="chip" href="#about">Rólam</a>
+          <a class="chip" href="#projects">Projektek</a>
+        </div>
+      </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div>
+        <h1>Üdv! <span aria-hidden="true">👋</span><br><span style="color: var(--brand)">Adat / Web / Automatizálás</span> fókuszú portfólió</h1>
+        <p>Rövid bemutatkozás: mivel foglalkozol, milyen tech stack érdekel (pl. Python, SQL, Power BI, React). Írj ide 1–2 mondatot a célodról és arról, hogy a projektek mit mutatnak meg.</p>
+        <div class="badges" aria-label="technológiák">
+          <span class="badge">Python</span>
+          <span class="badge">SQL</span>
+          <span class="badge">Pandas</span>
+          <span class="badge">Power BI</span>
+          <span class="badge">React</span>
+        </div>
+      </div>
+      <div>
+        <img class="thumb" src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1400&auto=format&fit=crop" alt="Absztrakt kék-lila háttér illusztráció" />
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" style="margin-top: 40px;">
+      <div class="card lg" style="padding: 18px;">
+        <h2 style="margin: 0 0 6px 0;">Rólam</h2>
+        <p style="color: var(--muted); margin: 0; max-width: 80ch;">Itt egy bővebb bemutatkozás. Pár mondat a hátteredről, érdeklődési köreidről, tanulmányaidról és arról, milyen pozíciók érdekelnek. Helyettesítsd a szöveget a sajátoddal.</p>
+      </div>
+    </section>
+
+    <!-- PROJECTS GRID -->
+    <section id="projects" style="margin-top: 28px;">
+      <h2 style="margin: 0 0 12px 0;">Kiemelt projektek</h2>
+      <div class="grid">
+        <!-- KÁRTYÁK – minden kártya egy külső projekt oldalra vagy GitHub repohoz visz -->
+
+        <article class="card md">
+          <a class="card-link" href="https://felhasznalonev.github.io/projekt-1/" target="_blank" rel="noreferrer noopener"><span class="sr-only">Megnyitás</span></a>
+          <img class="thumb" src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1400&auto=format&fit=crop" alt="Kód és laptop illusztráció" />
+          <div class="card-body">
+            <h3>Projekt 1 – Analitika Dashboard</h3>
+            <p>Adattisztítás, modellezés és dashboard készítés (Python, Pandas, Power BI).</p>
+            <div class="tags">
+              <span class="tag">Python</span><span class="tag">Pandas</span><span class="tag">Power BI</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card sm">
+          <a class="card-link" href="https://felhasznalonev.github.io/projekt-2/" target="_blank" rel="noreferrer noopener"></a>
+          <img class="thumb" src="https://images.unsplash.com/photo-1553484771-047a44eee27c?q=80&w=1400&auto=format&fit=crop" alt="Diagram és adatok illusztráció" />
+          <div class="card-body">
+            <h3>Projekt 2 – Kérdőív elemzés</h3>
+            <p>Felmérés eredményeinek elemzése és vizualizáció (CSV → riport).</p>
+            <div class="tags">
+              <span class="tag">Jupyter</span><span class="tag">Matplotlib</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card sm">
+          <a class="card-link" href="https://felhasznalonev.github.io/projekt-3/" target="_blank" rel="noreferrer noopener"></a>
+          <img class="thumb" src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=1400&auto=format&fit=crop" alt="Városi éjszakai fények illusztráció" />
+          <div class="card-body">
+            <h3>Projekt 3 – E-kereskedelmi elemzés</h3>
+            <p>Rendelés és kosár adatok vizsgálata, cohort és RFM elemzés.</p>
+            <div class="tags">
+              <span class="tag">SQL</span><span class="tag">Python</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card md">
+          <a class="card-link" href="https://github.com/felhasznalonev/projekt-4" target="_blank" rel="noreferrer noopener"></a>
+          <img class="thumb" src="https://images.unsplash.com/photo-1518640467707-6811f4a6ab73?q=80&w=1400&auto=format&fit=crop" alt="Neurális hálózat illusztráció" />
+          <div class="card-body">
+            <h3>Projekt 4 – ML osztályozó</h3>
+            <p>Kísérleti modell összehasonlítás, baseline vs. finomhangolt pipeline.</p>
+            <div class="tags">
+              <span class="tag">scikit-learn</span><span class="tag">MLflow</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card lg">
+          <a class="card-link" href="https://felhasznalonev.github.io/projekt-5/" target="_blank" rel="noreferrer noopener"></a>
+          <img class="thumb" src="https://images.unsplash.com/photo-1523961131990-5ea7c61b2107?q=80&w=1400&auto=format&fit=crop" alt="Zöld energiát jelképező szélturbinák" />
+          <div class="card-body">
+            <h3>Projekt 5 – Megújuló energia elemzés</h3>
+            <p>Európa termelési trendjei, idősortelemzés és előrejelzés.</p>
+            <div class="tags">
+              <span class="tag">Time series</span><span class="tag">Prophet</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <footer>
+      <p>© <span id="year"></span> A te neved. Minden jog fenntartva.</p>
+    </footer>
   </div>
+
+  <script>
+    // aktuális év láblécben
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
